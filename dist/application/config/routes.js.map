@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../app/application/config/routes.js"],"names":["routes"],"mappings":";;;;;AAAA,IAAMA,SAAS;AACd;AACA,eAAe;AAFD,CAAf;;kBAKeA,M","file":"routes.js","sourcesContent":["const routes = {\r\n\t//method / url : Controller/Function\r\n\t'GET /final' : 'User.index',\r\n}\r\n\r\nexport default routes"]}

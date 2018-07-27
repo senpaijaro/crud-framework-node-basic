@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%- title %></title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="/public/plugins/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/plugins/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/public/plugins/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="/public/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <style>
+      #backgroud_img{
+          background-image: url('/public/meteor.jpg') !important;
+      }
+      #title_head{
+        color: #ffffff;
+        font-size: 24px;
+        margin: auto;
+      }
+      #logo{
+        width: 300px;
+        height: 80px;
+        margin: auto;
+      }
+  </style>
+</head>
+<body  id="backgroud_img" ng-app="LoginApp">
+    <div class="login-logo" style="margin-top:50px;">
+    </div>  
+
+    <div class="col-md-4"></div>
+        <div class="col-md-4" ng-controller="formLoginCtrl">
+        <p id="title_head"><b>SAN ROQUE SUPERMARKET</b></p>
+        <p>
+        <img src="/public/header_logo.png" class="img-responsive" id="logo">
+    </p>
+        <br>
+            <!-- /.login-logo -->
+            <div class="login-box-body">
+                <h5 class="text-center">LOGIN HERE</h5>
+            <form method="post" >
+                <div class="form-group">
+                    <div class="input-group input-group-md">
+                        <span id="flat-input" class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>
+                        <input  
+                            type="text" 
+                            class="form-control" 
+                            id="xusername"
+                            placeholder="Username" 
+                            ng-model="xusername"
+                        >
+                    </div>    
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group input-group-md">
+                        <span id="flat-input" class="input-group-addon"><i class="fa fa-fw fa-lock"></i></span>
+                        <input  
+                            type="password" 
+                            id="xpassword"
+                            class="form-control" 
+                            placeholder="Password"
+                            ng-model="xpassword"
+                        >
+                    </div>  
+                </div>
+                <input type="text" ng-hide="true" ng-model="xbranchCode" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <button 
+                            type="submit" 
+                            name="btn-login" 
+                            class="btn btn-primary btn-flat btn-sm" 
+                            style="width:100%;"
+                            ng-click="login();">
+                        Login</button>
+                    </div>
+                <br>
+                <hr>
+                
+                <div class="col-md-12 text-center"><p style="font-size:13px;">SAN ROQUE SUPERMARKET NOVALICHES</p></div>
+                <!-- /.col -->
+                </div>
+            </form>
+            </div>
+    </div>
+    <div class="col-md-4"></div>
+
+<script src="/public/plugins/jquery/dist/jquery.min.js"></script>
+<script src="/public/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/public/dist/js/sweet_alert.js"></script>
+<script src="/public/dist/js/angular.min.js"></script>
+<script src="/public/dist/js/socket_io.js"></script>
+<script src="/public/custom/js/global.js"></script>
+<script>
+    var app = angular.module('LoginApp', []);
+        app.controller('formLoginCtrl', function($scope, $http) {
+            $scope.xbranchCode = 'srsn'
+            $scope.login = function (){
+                var err = "";
+                if($('#xusername').val() === ""){
+                    err = 'Please Enter Username';
+                }
+                else if($('#xpassword').val() === ""){
+                    err = 'Please Enter Password';
+                }
+
+                if(err !== ""){
+                    swal({
+                        title: "OPS !!",
+                        text: err,
+                        icon: "error",
+                        button: true,
+                    });
+                }
+
+                if(err === ""){
+                    var data = {
+                        xbranchCode: $scope.xbranchCode,
+                        xusername: $scope.xusername,
+                        xpassword: $scope.xpassword
+                    }
+                    $http({
+                        url: apiUrl+"login/auth",
+                        method: "post",
+                        data: data
+                    }).then(function mySuccess(response){
+                        var status = response.data.status;
+                        if(status === "OK"){
+                            window.location.href = "/srs_receving/purchaser/receive_po";
+                        }else{
+                            swal({
+                                title: "Opss",
+                                text: "Invalid Credentials",
+                                icon: "error",
+                                buttons: true,
+                            })
+                        }
+                    },function myError(response){
+                        console.log(response);
+                    });
+                }
+            }
+        });
+</script>
+</body>
+</html>

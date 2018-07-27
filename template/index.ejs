@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>	
+	<style type="text/css">
+		.container{
+			width: 500px;
+		}
+		.container-one{
+			width: 40%;
+		}
+		.container-two{
+			width: 40%;
+		}
+		.form-input{
+			width: 100%;
+			resize: none;"
+		}
+		textarea{
+			height: 100px
+		}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+			<ul id="show_message">
+				
+			</ul>
+			<input type="text" name="username" id="username" class="form-input"  placeholder="Please enter name"><br><br>
+			<textarea type="text"  autocomplete="off" name="message" id="message" class="form-input"></textarea><br> 
+			<button type="button" id="send" onclick="send()"> send </button>
+
+	</div>
+
+
+</body>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script type="text/javascript">
+	const socket = io()
+	function send(){
+		socket.emit('chat message', {
+			username: $('#username').val(),
+			message: $('#message').val()
+		})
+		$('#message').val('')
+		return false
+	}
+	function message(){
+		socket.on('chat messages', function(data){
+			var ul = $('#show_message')
+			ul.append('<li>'+data.username+ ' ' +data.message+'</li>')
+		})
+	}
+	message()
+</script>
+</html>
